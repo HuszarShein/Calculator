@@ -48,7 +48,6 @@ private:
                           // 7 => sin(x)..ctg(x)
                           // 8 => log(x)
                           // 9 => exp
-    //
 
 public slots:
     //0
@@ -265,30 +264,31 @@ public slots:
     //7
     void tri(int tri)
     {
-            switch (buttonNumber) {
-                case 0:
-                    switchTri(tri);
-                    calculate(tri+4);
-                    QTextStream(&real_with_symbol) << real << symbol;
-                    break;
-                case 1:
+        switch (buttonNumber) {
+            case 0:
+                switchTri(tri);
+                calculate(tri+4);
+                QTextStream(&real_with_symbol) << real << symbol;
+                break;
+            case 1:
 
-                    break;
-                case 2:
+                break;
+            case 2:
 
-                    break;
-                case 5:
+                break;
+            case 5:
 
-                    break;
-                case 6:
+                break;
+            case 6:
 
-                    break;
-             /* case 3:
-                case 4:
-                case 7:
-                case 8:
-                case 9:  */
-            }
+                break;
+         /* case 3:
+            case 4:
+            case 7:
+            case 8:
+            case 9:  */
+        }
+        last_number = false;
         buttonNumber = 7;
     }
 
@@ -343,28 +343,24 @@ public slots:
                 symbol = "";
                 QTextStream(&symbol) << "sin(" << num << ") ";
                 real_with_symbol = "";
-                last_number = false;
                 break;
             case 2:
                 symNumber = 2;
                 symbol = "";
                 QTextStream(&symbol) << "cos(" << num << ") ";
                 real_with_symbol = "";
-                last_number = false;
                 break;
             case 3:
                 symNumber = 3;
                 symbol = "";
                 QTextStream(&symbol) << "tg(" << num << ") ";
                 real_with_symbol = "";
-                last_number = false;
                 break;
             case 4:
                 symNumber = 4;
                 symbol = "";
                 QTextStream(&symbol) << "ctg(" << num << ") ";
                 real_with_symbol = "";
-                last_number = false;
                 break;
             case 0:
                 real_with_symbol = "";
@@ -412,6 +408,7 @@ public slots:
 
     void calculate(int sym_Number)
     {
+
         if ((last_number == true) || ((last_number == true) && (is_symbol_repeated == false)) || (buttonNumber == 7))
         {
             if(sym_Number == 0)
@@ -431,8 +428,12 @@ public slots:
                     res /= number;
                     break;
                 case 5:
-                    number = qSin(number);
-                    calculate(symNumber);
+                    number = sind(number);
+                    calculate(1);//symNumber);
+                    break;
+                case 6:
+                    number = cosd(number);
+                    calculate(1);//symNumber);
                     break;
             }
         }
@@ -503,27 +504,13 @@ public slots:
                 QTextStream(&TextInput2) << numberSTR;
                 break;
             case 7:
-                sind(1125);
-                QTextStream(&TextInput2) /*<< a << ' ' << b;*/<< sind(355);//*/qSin(361*PI/180);
+                QTextStream(&TextInput2) << res;
                 break;
          /* case 3:
             case 4:
             case 8:
             case 9:  */
         }
-        /*if ((buttonNumber != 0) || (buttonNumber == 2))
-            {
-                QTextStream(&TextInput2) << res;
-                return TextInput2;
-            }
-        else
-            {
-                if (buttonNumber == 5)
-                    QTextStream(&TextInput2) << number << ",";
-                else
-                    QTextStream(&TextInput2) << number;
-                return TextInput2;
-            }*/
         return TextInput2;
     }    
 
@@ -534,32 +521,48 @@ public slots:
 
     double sind(double x)
     {
-      if (!isfinite(x))
-      {
-        return qSin(x);
-      }
-      if (x < 0.0)
-      {
-        return -sind(-x);
-      }
-      int quo;
-      double x90 = remquo(fabs(x), 90.0, &quo);
-      a = x90; b = quo;
-      switch (quo % 4)
-      {
-        case 0:
-          // Use * 1.0 to avoid -0.0
-          return qCos(d2r(x90)* 1.0);
-        case 1:
-          return sin(d2r(x90));
-        case 2:
-          return qCos(d2r(-x90) * 1.0);
-        case 3:
-          return -sin(d2r(x90));
-      }
-      return 0.0;
+        if (!isfinite(x))
+          return sin(x);
+        if (x < 0.0)
+          return -sind(-x);
+        int quo;
+        double x90 = remquo(fabs(x), 90.0, &quo);
+        a = x90; b = quo;
+        switch (quo % 4)
+        {
+          case 0:
+            return sin(d2r(x90)* 1.0);
+          case 1:
+            return cos(d2r(x90));
+          case 2:
+            return sin(d2r(-x90) * 1.0);
+          case 3:
+            return -cos(d2r(x90));
+        }
+        return 0.0;
     }
-
+    double cosd(double x)
+    {
+        if (!isfinite(x))
+          return sin(x);
+        if (x < 0.0)
+          return -sind(-x);
+        int quo;
+        double x90 = remquo(fabs(x), 90.0, &quo);
+        a = x90; b = quo;
+        switch (quo % 4)
+        {
+          case 0:
+            return cos(d2r(x90)* 1.0);
+          case 1:
+            return sin(d2r(x90));//-
+          case 2:
+            return cos(d2r(-x90) * 1.0);//-
+          case 3:
+            return -sin(d2r(x90));//+
+        }
+        return 0.0;
+    }
 
     QString textInput1_1_real()
     {
