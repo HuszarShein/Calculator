@@ -436,6 +436,14 @@ public slots:
                     number = cosd(number);
                     calculate(1);//symNumber);
                     break;
+                case 7:
+                    number = tand(number);
+                    calculate(1);//symNumber);
+                    break;
+                case 8:
+                    number = cosd(number);
+                    calculate(1);//symNumber);
+                    break;
             }
         }
     }
